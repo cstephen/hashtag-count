@@ -43,7 +43,7 @@ module.exports = function (keys) {
         resetCount();
         setTimeout(function () {
           for(var i = 0; i < terms.length; i++) {
-            if(output[terms[i]].length >= cap) {
+            if(cap !== 0 && output[terms[i]].length >= cap) {
               output[terms[i]].shift();
             }
             output[terms[i]].push(tally[terms[i]]);
