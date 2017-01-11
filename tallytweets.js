@@ -13,13 +13,15 @@ module.exports = function (keys) {
   var stream;
   var startTime;
   var interval;
+  var cap;
   var terms = [];
   var output;
   var tally = {};
 
-  function start(t, i, o) {
+  function start(t, i, c, o) {
     terms = t.slice(0);
     interval = i;
+    cap = c;
     output = o;
 
     stream = T.stream('statuses/filter', { track: terms });
@@ -41,6 +43,9 @@ module.exports = function (keys) {
         resetCount();
         setTimeout(function () {
           for(var i = 0; i < terms.length; i++) {
+            if(output[terms[i]].length >= cap) {
+              output[terms[i]].shift();
+            }
             output[terms[i]].push(tally[terms[i]]);
           }
           next();

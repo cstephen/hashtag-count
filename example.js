@@ -18,6 +18,9 @@ var terms = [ '#superbowl', '#pizza', '#beer' ];
 // into the term's array in the output object.
 var interval = 60;
 
+// Maximum number of time interval tallies to keep. Shift out the old ones.
+var cap = 10;
+
 // An empty object that will be populated by the terms and their corresponding
 // array of tweet counts for each interval of time. This is asynchronous and
 // ongoing. Looks like this:
@@ -29,7 +32,7 @@ var interval = 60;
 var output = {};
 
 // Open a connection to Twitter's Streaming API and start capturing tweets!
-tallytweets.start(terms, interval, output);
+tallytweets.start(terms, interval, cap, output);
 
 // Confirm that results are being updated as expected.
 async.forever(
