@@ -18,8 +18,9 @@ var terms = [ '#superbowl', '#pizza', '#beer' ];
 // into the term's array in the output object.
 var interval = 15;
 
-// An object full of the provided terms and their associated time interval
-// tally array. Looks like this:
+// An empty object that will be populated by the terms and their associated
+// array of tweet counts for each interval of time. This is asynchronous and
+// ongoing. Looks like this:
 // output = {
 //   '#superbowl': [ 7, 12, 4, 9, 2 ],
 //   '#pizza': [ 3, 1, 4, 2, 5 ],
