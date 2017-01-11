@@ -16,7 +16,7 @@ var terms = [ '#superbowl', '#pizza', '#beer' ];
 
 // Time interval in seconds. The tally for each time interval will be pushed
 // into the term's array in the output object.
-var interval = 15;
+var interval = 60;
 
 // An empty object that will be populated by the terms and their associated
 // array of tweet counts for each interval of time. This is asynchronous and
