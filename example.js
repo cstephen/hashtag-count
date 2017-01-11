@@ -40,6 +40,6 @@ async.forever(
     }, interval * 1000);
   },
   function(err) {
-
+    console.error(err);
   }
 );
