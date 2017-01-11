@@ -1,0 +1,24 @@
+{
+  "name": "tallytweets",
+  "version": "0.0.1",
+  "description": "Tally tweets by terms at a given time interval.",
+  "main": "tallytweets.js",
+  "dependencies": {
+    "async": "^2.1.4",
+    "twit": "^2.2.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tweet",
+    "count",
+    "twitter",
+    "hashtags",
+    "trends",
+    "time"
+  ],
+  "author": "Craig Stephenson",
+  "license": "MIT"
+}
