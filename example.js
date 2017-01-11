@@ -28,7 +28,7 @@ var interval = 60;
 // }
 var output = {};
 
-// Open a connection to Twitter's Steaming API and start capturing tweets!
+// Open a connection to Twitter's Streaming API and start capturing tweets!
 tallytweets.start(terms, interval, output);
 
 // Confirm that results are being updated as expected.
