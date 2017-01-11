@@ -33,7 +33,12 @@ var cap = 10;
 var output = {};
 
 // Open a connection to Twitter's Streaming API and start capturing tweets!
-tallytweets.start(terms, interval, cap, output);
+tallytweets.start({
+  terms: terms,
+  interval: interval,
+  cap: cap,
+  output: output
+});
 
 // Confirm that results are being updated as expected.
 async.forever(

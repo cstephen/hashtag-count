@@ -18,11 +18,11 @@ module.exports = function (keys) {
   var output;
   var tally = {};
 
-  function start(t, i, c, o) {
-    terms = t.slice(0);
-    interval = i;
-    cap = c;
-    output = o;
+  function start(settings) {
+    terms = settings.terms.slice(0);
+    interval = settings.interval;
+    cap = settings.cap;
+    output = settings.output;
 
     stream = T.stream('statuses/filter', { track: terms });
 
