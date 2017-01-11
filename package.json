@@ -1,7 +1,7 @@
 {
   "name": "tallytweets",
   "version": "0.0.1",
-  "description": "Tally tweets by terms at a given time interval.",
+  "description": "Tally tweets by terms over time at a provided interval.",
   "main": "tallytweets.js",
   "dependencies": {
     "async": "^2.1.4",
