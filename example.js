@@ -19,6 +19,7 @@ var terms = [ '#superbowl', '#pizza', '#beer' ];
 var interval = 60;
 
 // Maximum number of time interval tallies to keep. Shift out the old ones.
+// Set this to 0 for unlimited.
 var cap = 10;
 
 // An empty object that will be populated by the terms and their corresponding
