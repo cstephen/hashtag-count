@@ -15,19 +15,19 @@ module.exports = function (keys) {
   var interval;
   var cap;
   var terms = [];
-  var output;
+  var results = {};
   var tally = {};
 
   function start(settings) {
     terms = settings.terms.slice(0);
     interval = settings.interval;
     cap = settings.cap;
-    output = settings.output;
+    callback = settings.callback;
 
     stream = T.stream('statuses/filter', { track: terms });
 
     for(var i = 0; i < terms.length; i++) {
-      output[terms[i]] = [];
+      results[terms[i]] = [];
     }
 
     stream.on('tweet', function (tweet) {
@@ -43,11 +43,12 @@ module.exports = function (keys) {
         resetCount();
         setTimeout(function () {
           for(var i = 0; i < terms.length; i++) {
-            if(cap !== 0 && output[terms[i]].length >= cap) {
-              output[terms[i]].shift();
+            if(cap !== 0 && results[terms[i]].length >= cap) {
+              results[terms[i]].shift();
             }
-            output[terms[i]].push(tally[terms[i]]);
+            results[terms[i]].push(tally[terms[i]]);
           }
+          callback(results);
           next();
         }, interval * 1000);
       },

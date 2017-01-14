@@ -15,40 +15,30 @@ var tallytweets = tallytweets({
 var terms = [ '#superbowl', '#pizza', '#beer' ];
 
 // Time interval in seconds. The tally for each time interval will be pushed
-// into the term's array in the output object.
+// into the term's array in the results object.
 var interval = 60;
 
 // Maximum number of time interval tallies to keep. Shift out the old ones.
 // Set this to 0 for unlimited.
 var cap = 10;
 
-// An empty object that will be populated by the terms and their corresponding
-// array of tweet counts for each interval of time. This is asynchronous and
-// ongoing. Looks like this:
-// output = {
+// Called at the end of every time interval. Each term becomes a property of the
+// results object, and each term has its own array of time interval tallies.
+//
+// For example:
+// results = {
 //   '#superbowl': [ 7, 12, 4, 9, 2 ],
 //   '#pizza': [ 3, 1, 4, 2, 5 ],
 //   '#beer': [ 4, 9, 7, 2, 1 ]
 // }
-var output = {};
+var callback = function (results) {
+  console.log(results);
+}
 
 // Open a connection to Twitter's Streaming API and start capturing tweets!
 tallytweets.start({
   terms: terms,
   interval: interval,
   cap: cap,
-  output: output
+  callback: callback
 });
-
-// Confirm that results are being updated as expected.
-async.forever(
-  function(next) {
-    setTimeout(function () {
-      console.log(output);
-      next();
-    }, interval * 1000);
-  },
-  function(err) {
-    console.error(err);
-  }
-);
