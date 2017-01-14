@@ -1,4 +1,3 @@
-var async = require('async');
 var tallytweets = require('./tallytweets')
 
 // Log into your Twitter account and go here https://apps.twitter.com/
