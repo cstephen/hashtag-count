@@ -32,7 +32,13 @@ module.exports = function (keys) {
 
     stream.on('tweet', function (tweet) {
       for(var i = 0; i < terms.length; i++) {
-        if(tweet.text.indexOf(terms[i]) !== -1) {
+        // White space or punctuation characters must terminate a term search.
+        // This prevents false positives, so a tweet containing #foobar will not
+        // get picked up in a search for just #foo.
+        var terminate = ' \t\n!"#$%&\\\'()\*+,\-\.\/:;<=>?@\[\\\]\^_`{|}~';
+        var regex = new RegExp(terms[i] + '(?=[' + terminate + '])', 'i');
+
+        if(tweet.text.match(regex)) {
           tally[terms[i]] += 1;
         }
       }
