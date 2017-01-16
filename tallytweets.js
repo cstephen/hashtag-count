@@ -15,7 +15,7 @@ var tallytweets = function (keys) {
     timeout_ms:           60 * 1000,
   });
 
-  that.startTime = Date.now();
+  that.startDate = Date.now();
   that.tally = {};
   that.results = {};
 };
@@ -67,10 +67,10 @@ tallytweets.prototype.start = function (settings) {
   } else {
     async.until(
       function () {
-        var currentTime = new Date();
+        var currentDate = new Date();
         var negateLimit = '-' + that.limit;
-        var offsetDate = currentTime.strtotime(negateLimit);
-        return offsetDate > that.startTime;
+        var offsetDate = currentDate.strtotime(negateLimit);
+        return offsetDate > that.startDate;
       },
       function (next) {
         that.populateInterval(next);
@@ -90,8 +90,8 @@ tallytweets.prototype.populateInterval = function (next) {
 
   that.resetCount();
 
-  var currentTime = new Date();
-  var intervalString = currentTime.toISOString();
+  var currentDate = new Date();
+  var intervalString = currentDate.toISOString();
   that.results[intervalString] = {};
 
   setTimeout(function () {
@@ -99,7 +99,7 @@ tallytweets.prototype.populateInterval = function (next) {
       Object.keys(that.results).forEach(function (key) {
         var keyDate = new Date(key);
         var negateHistory = '-' + that.history;
-        var cutoffDate = currentTime.strtotime(negateHistory);
+        var cutoffDate = currentDate.strtotime(negateHistory);
 
         if (keyDate < cutoffDate) {
           delete that.results[key];
