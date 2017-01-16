@@ -3,16 +3,10 @@
 var conf = require('nconf');
 var TallyTweets = require('./tallytweets');
 
-conf.file({ file: './config.json' });
-
 // Log into your Twitter account and go here https://apps.twitter.com/
 // to generate keys for your application, then set them in config.json.
-var tt = new TallyTweets({
-  consumer_key: conf.get('consumer_key'),
-  consumer_secret: conf.get('consumer_secret'),
-  access_token: conf.get('access_token'),
-  access_token_secret: conf.get('access_token_secret'),
-});
+conf.file({ file: './config.json' });
+var tt = new TallyTweets(conf.get());
 
 // Array of terms to tally. Can be anything, such as @people or just plain
 // words, but hashtags are better for observing trends.
