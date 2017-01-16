@@ -33,17 +33,17 @@ tallytweets.prototype.start = function (settings) {
   that.stream = that.T.stream('statuses/filter', { track: that.terms });
 
   that.stream.on('tweet', function (tweet) {
-    for (var i = 0; i < that.terms.length; i++) {
+    that.terms.forEach(function (term) {
       // White space or punctuation characters must terminate a term search.
       // This prevents false positives, so a tweet containing #foobar will not
       // get picked up in a search for just #foo.
       var terminate = ' \t\n!"#$%&\\\'()\*+,\-\.\/:;<=>?@\[\\\]\^_`{|}~';
-      var regex = new RegExp(that.terms[i] + '(?=[' + terminate + '])', 'i');
+      var regex = new RegExp(term + '(?=[' + terminate + '])', 'i');
 
       if (tweet.text.match(regex)) {
-        that.tally[that.terms[i]] += 1;
+        that.tally[term] += 1;
       }
-    }
+    });
   });
 
   async.forever(
@@ -67,10 +67,10 @@ tallytweets.prototype.start = function (settings) {
           });
         }
 
-        for (var i = 0; i < that.terms.length; i++) {
-          var termTally = that.tally[that.terms[i]];
-          that.results[intervalString][that.terms[i]] = termTally;
-        }
+        that.terms.forEach(function (term) {
+          that.results[intervalString][term] = that.tally[term];
+        });
+
         that.callback(that.results);
         next();
       }, that.interval * 1000);
@@ -84,9 +84,9 @@ tallytweets.prototype.start = function (settings) {
 tallytweets.prototype.resetCount = function () {
   var that = this;
 
-  for (var i = 0; i < that.terms.length; i++) {
-    that.tally[that.terms[i]] = 0;
-  }
+  that.terms.forEach(function (term) {
+    that.tally[term] = 0;
+  });
 };
 
 module.exports = tallytweets;
