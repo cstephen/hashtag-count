@@ -6,6 +6,7 @@
   "dependencies": {
     "async": "^2.1.4",
     "date-util": "^1.2.1",
+    "nconf": "^0.8.4",
     "twit": "^2.2.5"
   },
   "devDependencies": {},
