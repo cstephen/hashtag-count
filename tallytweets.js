@@ -1,3 +1,5 @@
+'use strict';
+
 var async = require('async');
 var Twit = require('twit');
 require('date-util');
@@ -15,7 +17,7 @@ var tallytweets = function (keys) {
 
   that.tally = {};
   that.results = {};
-}
+};
 
 tallytweets.prototype.start = function (settings) {
   var that = this;
@@ -24,21 +26,21 @@ tallytweets.prototype.start = function (settings) {
   that.interval = settings.interval;
   that.callback = settings.callback;
 
-  if(settings.limit !== undefined) {
+  if (settings.limit !== undefined) {
     that.limit = settings.limit;
   }
 
   that.stream = that.T.stream('statuses/filter', { track: that.terms });
 
   that.stream.on('tweet', function (tweet) {
-    for(var i = 0; i < that.terms.length; i++) {
+    for (var i = 0; i < that.terms.length; i++) {
       // White space or punctuation characters must terminate a term search.
       // This prevents false positives, so a tweet containing #foobar will not
       // get picked up in a search for just #foo.
       var terminate = ' \t\n!"#$%&\\\'()\*+,\-\.\/:;<=>?@\[\\\]\^_`{|}~';
       var regex = new RegExp(that.terms[i] + '(?=[' + terminate + '])', 'i');
 
-      if(tweet.text.match(regex)) {
+      if (tweet.text.match(regex)) {
         that.tally[that.terms[i]] += 1;
       }
     }
@@ -53,19 +55,19 @@ tallytweets.prototype.start = function (settings) {
       that.results[intervalString] = {};
 
       setTimeout(function () {
-        if(that.limit !== undefined) {
-          Object.keys(that.results).forEach(function (key, index) {
+        if (that.limit !== undefined) {
+          Object.keys(that.results).forEach(function (key) {
             var keyDate = new Date(key);
             var negateLimit = '-' + that.limit;
             var cutoffDate = currentTime.strtotime(negateLimit);
 
-            if(keyDate < cutoffDate) {
+            if (keyDate < cutoffDate) {
               delete that.results[key];
             }
           });
         }
 
-        for(var i = 0; i < that.terms.length; i++) {
+        for (var i = 0; i < that.terms.length; i++) {
           var termTally = that.tally[that.terms[i]];
           that.results[intervalString][that.terms[i]] = termTally;
         }
@@ -73,18 +75,18 @@ tallytweets.prototype.start = function (settings) {
         next();
       }, that.interval * 1000);
     },
-    function(err) {
+    function (err) {
       console.error(err);
     }
   );
-}
+};
 
 tallytweets.prototype.resetCount = function () {
   var that = this;
 
-  for(var i = 0; i < that.terms.length; i++) {
+  for (var i = 0; i < that.terms.length; i++) {
     that.tally[that.terms[i]] = 0;
   }
-}
+};
 
 module.exports = tallytweets;

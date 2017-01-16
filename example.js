@@ -1,8 +1,10 @@
-var tallytweets = require('./tallytweets')
+'use strict';
+
+var TallyTweets = require('./tallytweets');
 
 // Log into your Twitter account and go here https://apps.twitter.com/
 // to generate keys for your application.
-var tallytweets = new tallytweets({
+var tt = new TallyTweets({
   consumer_key:         '...',
   consumer_secret:      '...',
   access_token:         '...',
@@ -11,7 +13,7 @@ var tallytweets = new tallytweets({
 
 // Array of terms to tally. Can be anything, such as @people or just plain
 // words, but hashtags are better for observing trends.
-var terms = [ '#superbowl', '#pizza', '#beer' ];
+var terms = ['#superbowl', '#pizza', '#beer'];
 
 // Time interval in seconds. The tally for each time interval will be pushed
 // into the term's array in the results object.
@@ -27,14 +29,14 @@ var interval = 60;
 // }
 var callback = function (results) {
   console.log(results);
-}
+};
 
 // Optional parameter. Delete data older than this. Can be seconds, minutes,
 // hours, days, weeks, months, etc.
 var limit = '10 minutes';
 
 // Open a connection to Twitter's Streaming API and start capturing tweets!
-tallytweets.start({
+tt.start({
   terms: terms,           // required
   interval: interval,     // required
   callback: callback,     // required
