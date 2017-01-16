@@ -1,5 +1,6 @@
 var async = require('async');
 var Twit = require('twit');
+require('date-util');
 
 module.exports = function (keys) {
   var T = new Twit({
@@ -13,7 +14,7 @@ module.exports = function (keys) {
   var stream;
   var startTime;
   var interval;
-  var cap;
+  var limit;
   var terms = [];
   var results = {};
   var tally = {};
@@ -21,14 +22,13 @@ module.exports = function (keys) {
   function start(settings) {
     terms = settings.terms.slice(0);
     interval = settings.interval;
-    cap = settings.cap;
     callback = settings.callback;
 
-    stream = T.stream('statuses/filter', { track: terms });
-
-    for(var i = 0; i < terms.length; i++) {
-      results[terms[i]] = [];
+    if(settings.limit !== undefined) {
+      limit = settings.limit;
     }
+
+    stream = T.stream('statuses/filter', { track: terms });
 
     stream.on('tweet', function (tweet) {
       for(var i = 0; i < terms.length; i++) {
@@ -47,12 +47,26 @@ module.exports = function (keys) {
     async.forever(
       function(next) {
         resetCount();
+
+        var currentTime = new Date();
+        var intervalString = currentTime.toISOString();
+        results[intervalString] = {};
+
         setTimeout(function () {
+          if(limit !== undefined) {
+            Object.keys(results).forEach(function (key, index) {
+              var keyDate = new Date(key);
+              var negateLimit = '-' + limit;
+              var cutoffDate = currentTime.strtotime(negateLimit);
+
+              if(keyDate < cutoffDate) {
+                delete results[key];
+              }
+            });
+          }
+
           for(var i = 0; i < terms.length; i++) {
-            if(cap !== 0 && results[terms[i]].length >= cap) {
-              results[terms[i]].shift();
-            }
-            results[terms[i]].push(tally[terms[i]]);
+            results[intervalString][terms[i]] = tally[terms[i]];
           }
           callback(results);
           next();

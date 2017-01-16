@@ -5,6 +5,7 @@
   "main": "tallytweets.js",
   "dependencies": {
     "async": "^2.1.4",
+    "date-util": "^1.2.1",
     "twit": "^2.2.5"
   },
   "devDependencies": {},

@@ -17,27 +17,26 @@ var terms = [ '#superbowl', '#pizza', '#beer' ];
 // into the term's array in the results object.
 var interval = 60;
 
-// Maximum number of time interval tallies to keep. Shift out the old ones.
-// Set this to 0 for unlimited.
-var cap = 10;
-
-// Called at the end of every time interval. Each term becomes a property of the
-// results object, and each term has its own array of time interval tallies.
-//
-// For example:
-// results = {
-//   '#superbowl': [ 7, 12, 4, 9, 2 ],
-//   '#pizza': [ 3, 1, 4, 2, 5 ],
-//   '#beer': [ 4, 9, 7, 2, 1 ]
+// Callback function is called at the end of each time interval. The results
+// object contains start-of-interval time stamps with each interval's term
+// tallies. For example:
+// {
+//   '2017-01-16T00:00:10.606Z': { '#superbowl': 6, '#pizza': 1, '#beer': 8 },
+//   '2017-01-16T00:01:10.610Z': { '#superbowl': 7, '#pizza': 1, '#beer': 4 },
+//   '2017-01-16T00:02:10.612Z': { '#superbowl': 3, '#pizza': 1, '#beer': 0 }
 // }
 var callback = function (results) {
   console.log(results);
 }
 
+// Optional parameter. Delete data older than this. Can be seconds, minutes,
+// hours, days, weeks, months, etc.
+var limit = '10 minutes';
+
 // Open a connection to Twitter's Streaming API and start capturing tweets!
 tallytweets.start({
-  terms: terms,
-  interval: interval,
-  cap: cap,
-  callback: callback
+  terms: terms,           // required
+  interval: interval,     // required
+  callback: callback,     // required
+  limit: limit,           // optional
 });
