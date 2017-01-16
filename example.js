@@ -2,7 +2,7 @@ var tallytweets = require('./tallytweets')
 
 // Log into your Twitter account and go here https://apps.twitter.com/
 // to generate keys for your application.
-var tallytweets = tallytweets({
+var tallytweets = new tallytweets({
   consumer_key:         '...',
   consumer_secret:      '...',
   access_token:         '...',
