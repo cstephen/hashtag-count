@@ -15,6 +15,7 @@ var tallytweets = function (keys) {
     timeout_ms:           60 * 1000,
   });
 
+  that.startTime = Date.now();
   that.tally = {};
   that.results = {};
 };
@@ -24,10 +25,21 @@ tallytweets.prototype.start = function (settings) {
 
   that.terms = settings.terms.slice(0);
   that.interval = settings.interval;
-  that.callback = settings.callback;
+
+  if (settings.history !== undefined) {
+    that.history = settings.history;
+  }
 
   if (settings.limit !== undefined) {
     that.limit = settings.limit;
+  }
+
+  if (settings.intervalCb !== undefined) {
+    that.intervalCb = settings.intervalCb;
+  }
+
+  if (settings.finishedCb !== undefined) {
+    that.finishedCb = settings.finishedCb;
   }
 
   that.stream = that.T.stream('statuses/filter', { track: that.terms });
@@ -46,39 +58,65 @@ tallytweets.prototype.start = function (settings) {
     });
   });
 
-  async.forever(
-    function(next) {
-      that.resetCount();
-
-      var currentTime = new Date();
-      var intervalString = currentTime.toISOString();
-      that.results[intervalString] = {};
-
-      setTimeout(function () {
-        if (that.limit !== undefined) {
-          Object.keys(that.results).forEach(function (key) {
-            var keyDate = new Date(key);
-            var negateLimit = '-' + that.limit;
-            var cutoffDate = currentTime.strtotime(negateLimit);
-
-            if (keyDate < cutoffDate) {
-              delete that.results[key];
-            }
-          });
+  if (that.limit === undefined) {
+    async.forever(
+      function(next) {
+        that.populateInterval(next);
+      }
+    );
+  } else {
+    async.until(
+      function () {
+        var currentTime = new Date();
+        var negateLimit = '-' + that.limit;
+        var offsetDate = currentTime.strtotime(negateLimit);
+        return offsetDate > that.startTime;
+      },
+      function (next) {
+        that.populateInterval(next);
+      },
+      function () {
+        if (that.finishedCb !== undefined) {
+          that.finishedCb(that.results);
         }
+        that.stream.stop();
+      }
+    );
+  }
+};
 
-        that.terms.forEach(function (term) {
-          that.results[intervalString][term] = that.tally[term];
-        });
+tallytweets.prototype.populateInterval = function (next) {
+  var that = this;
 
-        that.callback(that.results);
-        next();
-      }, that.interval * 1000);
-    },
-    function (err) {
-      console.error(err);
+  that.resetCount();
+
+  var currentTime = new Date();
+  var intervalString = currentTime.toISOString();
+  that.results[intervalString] = {};
+
+  setTimeout(function () {
+    if (that.history !== undefined) {
+      Object.keys(that.results).forEach(function (key) {
+        var keyDate = new Date(key);
+        var negateHistory = '-' + that.history;
+        var cutoffDate = currentTime.strtotime(negateHistory);
+
+        if (keyDate < cutoffDate) {
+          delete that.results[key];
+        }
+      });
     }
-  );
+
+    that.terms.forEach(function (term) {
+      that.results[intervalString][term] = that.tally[term];
+    });
+
+    if (that.intervalCb !== undefined) {
+      that.intervalCb(that.results);
+    }
+
+    next();
+  }, that.interval * 1000);
 };
 
 tallytweets.prototype.resetCount = function () {
