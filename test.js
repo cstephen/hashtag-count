@@ -50,8 +50,8 @@ describe('tallytweets', function() {
   });
 
   describe('#start', function() {
-    var that = this;
-    that.timeout(10000);
+    var self = this;
+    self.timeout(10000);
 
     it('should return results object ', function (done) {
       tt.start({
@@ -61,26 +61,26 @@ describe('tallytweets', function() {
         finishedCb: function (err, results) {
           assert.isNull(err);
           assert.isObject(results);
-          that.results = results;
+          self.results = results;
           done();
         }
       });
     });
 
     it('results object should have more than one key ', function () {
-      assert.isAbove(Object.keys(that.results).length, 1);
+      assert.isAbove(Object.keys(self.results).length, 1);
     });
 
     it('results object keys should be parsable into Date objects ', function () {
-      Object.keys(that.results).forEach(function (key) {
+      Object.keys(self.results).forEach(function (key) {
         assert.typeOf(new Date(key), 'date');
       });
     });
 
     it('results object keys should contain objects of hashtags and counts ', function () {
-      Object.keys(that.results).forEach(function (key) {
-        assert.isObject(that.results[key]);
-        assert.isNumber(that.results[key]['#test']);
+      Object.keys(self.results).forEach(function (key) {
+        assert.isObject(self.results[key]);
+        assert.isNumber(self.results[key]['#test']);
       });
     });
   });

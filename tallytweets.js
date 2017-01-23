@@ -5,9 +5,9 @@ var Twit = require('twit');
 require('date-util');
 
 var tallytweets = function (keys) {
-  var that = this;
+  var self = this;
 
-  that.T = new Twit({
+  self.T = new Twit({
     consumer_key:         keys.consumer_key,
     consumer_secret:      keys.consumer_secret,
     access_token:         keys.access_token,
@@ -15,41 +15,41 @@ var tallytweets = function (keys) {
     timeout_ms:           60 * 1000,
   });
 
-  that.startDate = Date.now();
-  that.tally = {};
-  that.results = {};
+  self.startDate = Date.now();
+  self.tally = {};
+  self.results = {};
 };
 
 tallytweets.prototype.start = function (settings) {
-  var that = this;
+  var self = this;
 
-  that.terms = settings.terms.slice(0);
-  that.interval = settings.interval;
+  self.terms = settings.terms.slice(0);
+  self.interval = settings.interval;
 
   if (settings.history !== undefined) {
-    that.history = settings.history;
+    self.history = settings.history;
   }
 
   if (settings.limit !== undefined) {
-    that.limit = settings.limit;
+    self.limit = settings.limit;
   }
 
   if (settings.intervalCb !== undefined) {
-    that.intervalCb = settings.intervalCb;
+    self.intervalCb = settings.intervalCb;
   }
 
   if (settings.finishedCb !== undefined) {
-    that.finishedCb = settings.finishedCb;
+    self.finishedCb = settings.finishedCb;
   }
 
-  that.stream = that.T.stream('statuses/filter', { track: that.terms });
+  self.stream = self.T.stream('statuses/filter', { track: self.terms });
 
-  that.stream.on('parser-error', function (err) {
-    that.error = err;
+  self.stream.on('parser-error', function (err) {
+    self.error = err;
   });
 
-  that.stream.on('tweet', function (tweet) {
-    that.terms.forEach(function (term) {
+  self.stream.on('tweet', function (tweet) {
+    self.terms.forEach(function (term) {
       // White space or punctuation characters must terminate a term search.
       // This prevents false positives, so a tweet containing #foobar will not
       // get picked up in a search for just #foo.
@@ -57,83 +57,83 @@ tallytweets.prototype.start = function (settings) {
       var regex = new RegExp(term + '(?=[' + terminate + '])', 'i');
 
       if (tweet.text.match(regex)) {
-        that.tally[term] += 1;
+        self.tally[term] += 1;
       }
     });
   });
 
   async.until(
     function () {
-      if (that.error !== undefined) {
+      if (self.error !== undefined) {
         return true;
-      } else if (that.limit !== undefined) {
+      } else if (self.limit !== undefined) {
         var currentDate = new Date();
-        var negateLimit = '-' + that.limit;
+        var negateLimit = '-' + self.limit;
         var offsetDate = currentDate.strtotime(negateLimit);
-        return offsetDate > that.startDate;
+        return offsetDate > self.startDate;
       } else {
         return false;
       }
     },
     function (next) {
-      that.populateInterval(next);
+      self.populateInterval(next);
     },
     function () {
-      if (that.finishedCb !== undefined) {
-        if (that.error !== undefined) {
-          that.finishedCb(that.error, null);
+      if (self.finishedCb !== undefined) {
+        if (self.error !== undefined) {
+          self.finishedCb(self.error, null);
         } else {
-          that.finishedCb(null, that.results);
+          self.finishedCb(null, self.results);
         }
       }
-      that.stream.stop();
+      self.stream.stop();
     }
   );
 };
 
 tallytweets.prototype.populateInterval = function (next) {
-  var that = this;
+  var self = this;
 
-  that.resetCount();
+  self.resetCount();
 
   var currentDate = new Date();
   var intervalString = currentDate.toISOString();
-  that.results[intervalString] = {};
+  self.results[intervalString] = {};
 
   setTimeout(function () {
-    if (that.history !== undefined) {
-      Object.keys(that.results).forEach(function (key) {
+    if (self.history !== undefined) {
+      Object.keys(self.results).forEach(function (key) {
         var keyDate = new Date(key);
-        var negateHistory = '-' + that.history;
+        var negateHistory = '-' + self.history;
         var cutoffDate = currentDate.strtotime(negateHistory);
 
         if (keyDate < cutoffDate) {
-          delete that.results[key];
+          delete self.results[key];
         }
       });
     }
 
-    that.terms.forEach(function (term) {
-      that.results[intervalString][term] = that.tally[term];
+    self.terms.forEach(function (term) {
+      self.results[intervalString][term] = self.tally[term];
     });
 
-    if (that.intervalCb !== undefined) {
-      if (that.error !== undefined) {
-        that.intervalCb(that.error, null);
+    if (self.intervalCb !== undefined) {
+      if (self.error !== undefined) {
+        self.intervalCb(self.error, null);
       } else {
-        that.intervalCb(null, that.results);
+        self.intervalCb(null, self.results);
       }
     }
 
     next();
-  }, that.interval * 1000);
+  }, self.interval * 1000);
 };
 
 tallytweets.prototype.resetCount = function () {
-  var that = this;
+  var self = this;
 
-  that.terms.forEach(function (term) {
-    that.tally[term] = 0;
+  self.terms.forEach(function (term) {
+    self.tally[term] = 0;
   });
 };
 
