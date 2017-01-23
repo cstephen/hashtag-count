@@ -58,7 +58,8 @@ describe('tallytweets', function() {
         terms: terms,
         interval: interval,
         limit: limit,
-        finishedCb: function (results) {
+        finishedCb: function (err, results) {
+          assert.isNull(err);
           assert.isObject(results);
           that.results = results;
           done();

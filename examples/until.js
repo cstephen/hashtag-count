@@ -29,8 +29,12 @@ var limit = '5 minutes';
 //   '2017-01-16T00:01:10.610Z': { '#superbowl': 7, '#pizza': 1, '#beer': 4 },
 //   '2017-01-16T00:02:10.612Z': { '#superbowl': 3, '#pizza': 1, '#beer': 0 }
 // }
-var finishedCb = function (results) {
-  console.log(results);
+var finishedCb = function (err, results) {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log(results);
+  }
 };
 
 // Open a connection to Twitter's Streaming API and start capturing tweets!

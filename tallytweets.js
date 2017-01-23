@@ -44,6 +44,10 @@ tallytweets.prototype.start = function (settings) {
 
   that.stream = that.T.stream('statuses/filter', { track: that.terms });
 
+  that.stream.on('parser-error', function (err) {
+    that.error = err;
+  });
+
   that.stream.on('tweet', function (tweet) {
     that.terms.forEach(function (term) {
       // White space or punctuation characters must terminate a term search.
@@ -58,31 +62,33 @@ tallytweets.prototype.start = function (settings) {
     });
   });
 
-  if (that.limit === undefined) {
-    async.forever(
-      function(next) {
-        that.populateInterval(next);
-      }
-    );
-  } else {
-    async.until(
-      function () {
+  async.until(
+    function () {
+      if (that.error !== undefined) {
+        return true;
+      } else if (that.limit !== undefined) {
         var currentDate = new Date();
         var negateLimit = '-' + that.limit;
         var offsetDate = currentDate.strtotime(negateLimit);
         return offsetDate > that.startDate;
-      },
-      function (next) {
-        that.populateInterval(next);
-      },
-      function () {
-        if (that.finishedCb !== undefined) {
-          that.finishedCb(that.results);
-        }
-        that.stream.stop();
+      } else {
+        return false;
       }
-    );
-  }
+    },
+    function (next) {
+      that.populateInterval(next);
+    },
+    function () {
+      if (that.finishedCb !== undefined) {
+        if (that.error !== undefined) {
+          that.finishedCb(that.error, null);
+        } else {
+          that.finishedCb(null, that.results);
+        }
+      }
+      that.stream.stop();
+    }
+  );
 };
 
 tallytweets.prototype.populateInterval = function (next) {
@@ -112,7 +118,11 @@ tallytweets.prototype.populateInterval = function (next) {
     });
 
     if (that.intervalCb !== undefined) {
-      that.intervalCb(that.results);
+      if (that.error !== undefined) {
+        that.intervalCb(that.error, null);
+      } else {
+        that.intervalCb(null, that.results);
+      }
     }
 
     next();
