@@ -2,7 +2,7 @@
   "name": "tweet-count",
   "version": "0.0.1",
   "description": "Count tweets over time using Twitter's Streaming API.",
-  "main": "tweet-count.js",
+  "main": "./lib/tweet-count.js",
   "dependencies": {
     "async": "^2.1.4",
     "date-util": "^1.2.1",

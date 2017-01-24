@@ -3,7 +3,7 @@
 'use strict';
 
 var conf = require('nconf');
-var TweetCount = require('../tweet-count');
+var TweetCount = require('../lib/tweet-count');
 
 // Log into your Twitter account and go here https://apps.twitter.com/ to
 // generate keys for your application, then set them in config.json. Or you can

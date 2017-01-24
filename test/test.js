@@ -1,7 +1,7 @@
 'use strict';
 
 var conf = require('nconf');
-var TweetCount = require('../tweet-count');
+var TweetCount = require('../lib/tweet-count');
 
 var chai = require('chai');
 var assert = chai.assert;
