@@ -9,6 +9,7 @@
 
   // Define globals exposed by jQuery.
   "jquery": true,
+  "mocha": true,
 
   // Define globals exposed by Node.js.
   "node": true,

@@ -12,44 +12,43 @@ var tc = new TweetCount(conf.get());
 var terms = ['#test'];
 var interval = 1;
 var limit = '3 seconds';
-var results;
 
-describe('tweet-count', function() {
-  it('tc should be an object ', function() {
+describe('tweet-count', function () {
+  it('tc should be an object ', function () {
     assert.isObject(tc);
   });
 
-  it('tc.T should be an object ', function() {
+  it('tc.T should be an object ', function () {
     assert.isObject(tc.T);
   });
 
-  it('tc.T.config should be an object ', function() {
+  it('tc.T.config should be an object ', function () {
     assert.isObject(tc.T.config);
   });
 
-  describe('#config', function() {
-    it('tc.T.config.consumer_key should be set ', function() {
+  describe('#config', function () {
+    it('tc.T.config.consumer_key should be set ', function () {
       assert.isString(tc.T.config.consumer_key);
       assert.notEqual('...', tc.T.config.consumer_key);
     });
 
-    it('tc.T.config.consumer_secret should be set ', function() {
+    it('tc.T.config.consumer_secret should be set ', function () {
       assert.isString(tc.T.config.access_token_secret);
       assert.notEqual('...', tc.T.config.access_token_secret);
     });
 
-    it('tc.T.config.access_token should be set ', function() {
+    it('tc.T.config.access_token should be set ', function () {
       assert.isString(tc.T.config.access_token_secret);
       assert.notEqual('...', tc.T.config.access_token_secret);
     });
 
-    it('tc.T.config.access_token_secret should be set ', function() {
+    it('tc.T.config.access_token_secret should be set ', function () {
       assert.isString(tc.T.config.access_token_secret);
       assert.notEqual('...', tc.T.config.access_token_secret);
     });
   });
 
-  describe('#start', function() {
+  describe('#start', function () {
     var self = this;
     self.timeout(10000);
 
