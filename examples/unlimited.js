@@ -3,19 +3,19 @@
 'use strict';
 
 var conf = require('nconf');
-var TallyTweets = require('../tallytweets');
+var TweetCount = require('../tweet-count');
 
 // Log into your Twitter account and go here https://apps.twitter.com/ to
 // generate keys for your application, then set them in config.json. Or you can
 // hard-code them like this instead:
-// var tt = new TallyTweets({
+// var tc = new TweetCount({
 //   'consumer_key': '...',
 //   'consumer_secret': '...',
 //   'access_token': '...',
 //   'access_token_secret': '...'
 // });
 conf.file({ file: '../config.json' });
-var tt = new TallyTweets(conf.get());
+var tc = new TweetCount(conf.get());
 
 // Array of terms to tally. Can be anything, such as @people or just plain
 // words, but hashtags are better for observing trends.
@@ -46,7 +46,7 @@ var intervalCb = function (err, results) {
 };
 
 // Open a connection to Twitter's Streaming API and start capturing tweets!
-tt.start({
+tc.start({
   terms: terms,             // required
   interval: interval,       // required
   history: history,         // optional

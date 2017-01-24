@@ -1,51 +1,51 @@
 'use strict';
 
 var conf = require('nconf');
-var TallyTweets = require('../tallytweets');
+var TweetCount = require('../tweet-count');
 
 var chai = require('chai');
 var assert = chai.assert;
 
 conf.file({ file: './config.json' });
-var tt = new TallyTweets(conf.get());
+var tc = new TweetCount(conf.get());
 
 var terms = ['#test'];
 var interval = 1;
 var limit = '3 seconds';
 var results;
 
-describe('tallytweets', function() {
-  it('tt should be an object ', function() {
-    assert.isObject(tt);
+describe('tweet-count', function() {
+  it('tc should be an object ', function() {
+    assert.isObject(tc);
   });
 
-  it('tt.T should be an object ', function() {
-    assert.isObject(tt.T);
+  it('tc.T should be an object ', function() {
+    assert.isObject(tc.T);
   });
 
-  it('tt.T.config should be an object ', function() {
-    assert.isObject(tt.T.config);
+  it('tc.T.config should be an object ', function() {
+    assert.isObject(tc.T.config);
   });
 
   describe('#config', function() {
-    it('tt.T.config.consumer_key should be set ', function() {
-      assert.isString(tt.T.config.consumer_key);
-      assert.notEqual('...', tt.T.config.consumer_key);
+    it('tc.T.config.consumer_key should be set ', function() {
+      assert.isString(tc.T.config.consumer_key);
+      assert.notEqual('...', tc.T.config.consumer_key);
     });
 
-    it('tt.T.config.consumer_secret should be set ', function() {
-      assert.isString(tt.T.config.access_token_secret);
-      assert.notEqual('...', tt.T.config.access_token_secret);
+    it('tc.T.config.consumer_secret should be set ', function() {
+      assert.isString(tc.T.config.access_token_secret);
+      assert.notEqual('...', tc.T.config.access_token_secret);
     });
 
-    it('tt.T.config.access_token should be set ', function() {
-      assert.isString(tt.T.config.access_token_secret);
-      assert.notEqual('...', tt.T.config.access_token_secret);
+    it('tc.T.config.access_token should be set ', function() {
+      assert.isString(tc.T.config.access_token_secret);
+      assert.notEqual('...', tc.T.config.access_token_secret);
     });
 
-    it('tt.T.config.access_token_secret should be set ', function() {
-      assert.isString(tt.T.config.access_token_secret);
-      assert.notEqual('...', tt.T.config.access_token_secret);
+    it('tc.T.config.access_token_secret should be set ', function() {
+      assert.isString(tc.T.config.access_token_secret);
+      assert.notEqual('...', tc.T.config.access_token_secret);
     });
   });
 
@@ -54,7 +54,7 @@ describe('tallytweets', function() {
     self.timeout(10000);
 
     it('should return results object ', function (done) {
-      tt.start({
+      tc.start({
         terms: terms,
         interval: interval,
         limit: limit,

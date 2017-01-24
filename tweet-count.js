@@ -4,7 +4,7 @@ var async = require('async');
 var Twit = require('twit');
 require('date-util');
 
-var tallytweets = function (keys) {
+var TweetCount = function (keys) {
   var self = this;
 
   self.T = new Twit({
@@ -20,7 +20,7 @@ var tallytweets = function (keys) {
   self.results = {};
 };
 
-tallytweets.prototype.start = function (settings) {
+TweetCount.prototype.start = function (settings) {
   var self = this;
 
   self.terms = settings.terms.slice(0);
@@ -91,7 +91,7 @@ tallytweets.prototype.start = function (settings) {
   );
 };
 
-tallytweets.prototype.populateInterval = function (next) {
+TweetCount.prototype.populateInterval = function (next) {
   var self = this;
 
   self.resetCount();
@@ -129,7 +129,7 @@ tallytweets.prototype.populateInterval = function (next) {
   }, self.interval * 1000);
 };
 
-tallytweets.prototype.resetCount = function () {
+TweetCount.prototype.resetCount = function () {
   var self = this;
 
   self.terms.forEach(function (term) {
@@ -137,4 +137,4 @@ tallytweets.prototype.resetCount = function () {
   });
 };
 
-module.exports = tallytweets;
+module.exports = TweetCount;
