@@ -3,22 +3,21 @@
 'use strict';
 
 var conf = require('nconf');
-var TweetCount = require('../lib/tweet-count');
+var HashtagCount = require('../lib/hashtag-count');
 
 // Log into your Twitter account and go here https://apps.twitter.com/ to
 // generate keys for your application, then set them in config.json. Or you can
 // hard-code them like this instead:
-// var tc = new TweetCount({
+// var hc = new HashtagCount({
 //   'consumer_key': '...',
 //   'consumer_secret': '...',
 //   'access_token': '...',
 //   'access_token_secret': '...'
 // });
 conf.file({ file: '../config.json' });
-var tc = new TweetCount(conf.get());
+var hc = new HashtagCount(conf.get());
 
-// Array of terms to tally. Can be anything, such as @people or just plain
-// words, but hashtags are better for observing trends.
+// Array of hashtags to tally.
 var terms = ['#superbowl', '#pizza', '#beer'];
 
 // Time interval in seconds. The tally for each time interval will be pushed
@@ -45,7 +44,7 @@ var finishedCb = function (err, results) {
 };
 
 // Open a connection to Twitter's Streaming API and start capturing tweets!
-tc.start({
+hc.start({
   terms: terms,             // required
   interval: interval,       // required
   limit: limit,             // optional
