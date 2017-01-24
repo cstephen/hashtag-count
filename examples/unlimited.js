@@ -5,8 +5,15 @@
 var conf = require('nconf');
 var TallyTweets = require('../tallytweets');
 
-// Log into your Twitter account and go here https://apps.twitter.com/
-// to generate keys for your application, then set them in config.json.
+// Log into your Twitter account and go here https://apps.twitter.com/ to
+// generate keys for your application, then set them in config.json. Or you can
+// hard-code them like this instead:
+// var tt = new TallyTweets({
+//   'consumer_key': '...',
+//   'consumer_secret': '...',
+//   'access_token': '...',
+//   'access_token_secret': '...'
+// });
 conf.file({ file: '../config.json' });
 var tt = new TallyTweets(conf.get());
 
