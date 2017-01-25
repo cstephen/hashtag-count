@@ -20,13 +20,11 @@ var hc = new HashtagCount(conf.get());
 // Array of hashtags to tally.
 var hashtags = ['#superbowl', '#pizza', '#beer'];
 
-// Time interval in seconds. The hashtag tallies for each time interval will be
-// added to the results object.
-var interval = 60;
+// Hashtag tallies for each time interval will be added to the results object.
+var interval = '30 seconds';
 
-// Delete data older than this. Can be seconds, minutes, hours, days, weeks,
-// months, etc.
-var history = '30 minutes';
+// Delete data older than this.
+var history = '5 minutes';
 
 // Called at the end of each time interval. The results object contains
 // start-of-interval time stamps with each interval's hashtag tallies.

@@ -10,7 +10,7 @@ conf.file({ file: './config.json' });
 var hc = new HashtagCount(conf.get());
 
 var hashtags = ['#test'];
-var interval = 1;
+var interval = '1 second';
 var limit = '3 seconds';
 
 describe('hashtag-count', function () {
