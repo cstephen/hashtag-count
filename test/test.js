@@ -9,7 +9,7 @@ var assert = chai.assert;
 conf.file({ file: './config.json' });
 var hc = new HashtagCount(conf.get());
 
-var terms = ['#test'];
+var hashtags = ['#test'];
 var interval = 1;
 var limit = '3 seconds';
 
@@ -54,7 +54,7 @@ describe('hashtag-count', function () {
 
     it('should return results object ', function (done) {
       hc.start({
-        terms: terms,
+        hashtags: hashtags,
         interval: interval,
         limit: limit,
         finishedCb: function (err, results) {

@@ -18,17 +18,17 @@ conf.file({ file: '../config.json' });
 var hc = new HashtagCount(conf.get());
 
 // Array of hashtags to tally.
-var terms = ['#superbowl', '#pizza', '#beer'];
+var hashtags = ['#superbowl', '#pizza', '#beer'];
 
-// Time interval in seconds. The tally for each time interval will be pushed
-// into the term's array in the results object.
+// Time interval in seconds. The hashtag tallies for each time interval will be
+// added to the results object.
 var interval = 30;
 
 // Stop running after this amount of time has passed.
 var limit = '5 minutes';
 
 // Called after time limit has been reached it is set. The results object
-// contains start-of-interval time stamps with each interval's term tallies.
+// contains start-of-interval time stamps with each interval's hashtag tallies.
 // For example:
 // {
 //   '2017-01-16T00:00:10.606Z': { '#superbowl': 6, '#pizza': 1, '#beer': 8 },
@@ -45,7 +45,7 @@ var finishedCb = function (err, results) {
 
 // Open a connection to Twitter's Streaming API and start capturing tweets!
 hc.start({
-  terms: terms,             // required
+  hashtags: hashtags,       // required
   interval: interval,       // required
   limit: limit,             // optional
   finishedCb: finishedCb,   // optional
