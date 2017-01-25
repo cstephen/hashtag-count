@@ -1,6 +1,6 @@
 {
   "name": "hashtag-count",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Count hashtag occurrences over time using Twitter's Streaming API.",
   "main": "./lib/hashtag-count.js",
   "dependencies": {
