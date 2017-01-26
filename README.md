@@ -34,10 +34,7 @@ var hc = new HashtagCount({
 });
 ```
 
-The next step is to decide whether to run this module for a limited or unlimited
-length of time.
-
-### Run for limited time, analyze results when finished
+### Choose hashtags and time interval
 
 ```javascript
 // Array of hashtags to tally.
@@ -45,7 +42,11 @@ var hashtags = ['#superbowl', '#pizza', '#beer'];
 
 // Hashtag tallies for each time interval will be added to the results object.
 var interval = '30 seconds';
+```
 
+### Run for limited time and analyze results when finished
+
+```javascript
 // Stop running after this amount of time has passed.
 var limit = '5 minutes';
 
@@ -67,15 +68,9 @@ hc.start({
 });
 ```
 
-### Run for unlimited time, analyze results after every interval
+### Run for unlimited time and analyze results after every interval
 
 ```javascript
-// Array of hashtags to tally.
-var hashtags = ['#superbowl', '#pizza', '#beer'];
-
-// Hashtag tallies for each time interval will be added to the results object.
-var interval = '30 seconds';
-
 // Delete data older than this.
 var history = '5 minutes';
 
