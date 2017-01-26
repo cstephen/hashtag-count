@@ -26,8 +26,8 @@ var interval = '30 seconds';
 // Stop running after this amount of time has passed.
 var limit = '5 minutes';
 
-// Called after time limit has been reached it is set. The results object
-// contains start-of-interval time stamps with each interval's hashtag tallies.
+// Called after time limit has been reached. The results object contains
+// start-of-interval time stamps with each interval's hashtag tallies.
 // For example:
 // {
 //   '2017-01-16T00:00:10.606Z': { '#superbowl': 6, '#pizza': 1, '#beer': 8 },

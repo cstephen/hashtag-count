@@ -2,7 +2,7 @@
 
 ![hashtag-count](../master/images/hashtag-count.png?raw=true)
 
-Count hashtags occurrences over time at a provided interval using Twitter's
+Count hashtag occurrences over time at a provided interval using Twitter's
 Streaming API. Multiple hashtags can be tracked simultaneously. It can be used
 to collect hashtag counts for a provided length of time, with the results
 analyzed after the process has finished, or it can be configured to run forever,
