@@ -96,7 +96,8 @@ hc.start({
 
 The `results` object has the same structure regardless of whether it appears in
 the `intervalCb` or `finishedCb` callbacks. It takes the following form, where
-the time stamps represent the beginning of each time interval:
+the time stamp is an ISO string in UTC time representing the beginning of each
+interval:
 
 ```
 {
