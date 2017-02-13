@@ -105,3 +105,33 @@ the time stamps represent the beginning of each time interval:
   '2017-01-16T00:02:10.612Z': { '#superbowl': 3, '#pizza': 1, '#beer': 0 }
 }
 ```
+
+## Development and testing
+
+If you would like to get involved in development for this module, first clone
+this repository, then add your Twitter application keys to `config.json`. The
+keys set in this file are read by both the example scripts and unit tests.
+
+You will also need to install the module's dependencies and devDependencies with
+the following command:
+
+```
+npm install
+```
+
+### Example scripts
+
+Two example scripts are included. `limited.js` demonstrates how to use this
+module to collect hashtag counts for a finite length of time, whereas
+`unlimited.js` demonstrates how to analyze hashtag counts at the end of every
+time interval without a time limit. You will need to be in the `examples`
+directory to run these scripts so they can read `config.json` properly.
+
+### Unit tests
+
+Unit tests are located in the `test` directory and can be run from the
+hashtag-count root directory with the following command:
+
+```
+npm test
+```
