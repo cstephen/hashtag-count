@@ -2,6 +2,8 @@
 
 ![hashtag-count](http://i.imgur.com/UGZ0AAI.png)
 
+[![Build Status](https://travis-ci.org/cstephen/hashtag-count.svg?branch=master)](https://travis-ci.org/cstephen/hashtag-count)
+
 Count hashtag occurrences over time at a provided interval using Twitter's
 Streaming API. Multiple hashtags can be tracked simultaneously. It can be used
 to collect hashtag counts for a provided length of time, with the results
