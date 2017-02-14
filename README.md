@@ -136,3 +136,11 @@ hashtag-count root directory with the following command:
 ```
 npm test
 ```
+
+Your Twitter application keys can be set via the following environment variables
+for automated testing with Travis CI:
+
+- CONSUMER_KEY
+- CONSUMER_SECRET
+- ACCESS_TOKEN
+- ACCESS_TOKEN_SECRET
