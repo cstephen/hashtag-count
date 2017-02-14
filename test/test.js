@@ -7,7 +7,42 @@ var chai = require('chai');
 var assert = chai.assert;
 
 conf.file({ file: './config.json' });
-var hc = new HashtagCount(conf.get());
+
+var consumerKey;
+var consumerSecret;
+var accessToken;
+var accessTokenSecret;
+
+if (process.env.CONSUMER_KEY !== undefined) {
+  consumerKey = process.env.CONSUMER_KEY;
+} else {
+  consumerKey = conf.get('consumer_key');
+}
+
+if (process.env.CONSUMER_SECRET !== undefined) {
+  consumerSecret = process.env.CONSUMER_SECRET;
+} else {
+  consumerSecret = conf.get('consumer_secret');
+}
+
+if (process.env.ACCESS_TOKEN !== undefined) {
+  accessToken = process.env.ACCESS_TOKEN;
+} else {
+  accessToken = conf.get('access_token');
+}
+
+if (process.env.ACCESS_TOKEN_SECRET !== undefined) {
+  accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+} else {
+  accessTokenSecret = conf.get('access_token_secret');
+}
+
+var hc = new HashtagCount({
+  'consumer_key': consumerKey,
+  'consumer_secret': consumerSecret,
+  'access_token': accessToken,
+  'access_token_secret': accessTokenSecret
+});
 
 var hashtags = ['#test'];
 var interval = '1 second';
