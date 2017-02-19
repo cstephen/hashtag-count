@@ -40,7 +40,7 @@ var hc = new HashtagCount({
 
 ```javascript
 // Array of hashtags to tally.
-var hashtags = ['#superbowl', '#pizza', '#beer'];
+var hashtags = ['superbowl', 'pizza', 'beer'];
 
 // Hashtag tallies for each time interval will be added to the results object.
 var interval = '30 seconds';
@@ -103,9 +103,9 @@ interval:
 
 ```
 {
-  '2017-01-16T00:00:10.606Z': { '#superbowl': 6, '#pizza': 1, '#beer': 8 },
-  '2017-01-16T00:01:10.610Z': { '#superbowl': 7, '#pizza': 1, '#beer': 4 },
-  '2017-01-16T00:02:10.612Z': { '#superbowl': 3, '#pizza': 1, '#beer': 0 }
+  '2017-01-16T00:00:10.606Z': { 'superbowl': 6, 'pizza': 1, 'beer': 8 },
+  '2017-01-16T00:01:10.610Z': { 'superbowl': 7, 'pizza': 1, 'beer': 4 },
+  '2017-01-16T00:02:10.612Z': { 'superbowl': 3, 'pizza': 1, 'beer': 0 }
 }
 ```
 

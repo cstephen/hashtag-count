@@ -44,7 +44,7 @@ var hc = new HashtagCount({
   'access_token_secret': accessTokenSecret
 });
 
-var hashtags = ['#test'];
+var hashtags = ['test'];
 var interval = '1 second';
 var limit = '3 seconds';
 
@@ -114,7 +114,7 @@ describe('hashtag-count', function () {
     it('results object keys should contain objects of hashtags and counts ', function () {
       Object.keys(self.results).forEach(function (key) {
         assert.isObject(self.results[key]);
-        assert.isNumber(self.results[key]['#test']);
+        assert.isNumber(self.results[key]['test']);
       });
     });
   });
