@@ -39,7 +39,7 @@ var hc = new HashtagCount({
 ### Choose hashtags and time interval
 
 ```javascript
-// Array of hashtags to tally.
+// Array of hashtags to tally. Do not include # prefix.
 var hashtags = ['superbowl', 'pizza', 'beer'];
 
 // Hashtag tallies for each time interval will be added to the results object.
