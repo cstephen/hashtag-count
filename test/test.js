@@ -47,9 +47,9 @@ var hc = new HashtagCount({
 var hashtags = ['test'];
 var interval = '1 second';
 
-// Wait a minute to give Twitter a chance to establish a connection in case the
-// Twitter app credentials are being rate limited.
-var limit = '60 seconds';
+// Run for 5 minutes to give Twitter a chance to establish a connection in case
+// the Twitter app credentials are being rate limited.
+var limit = '300 seconds';
 
 describe('hashtag-count', function () {
   it('hc should be an object ', function () {
@@ -89,9 +89,9 @@ describe('hashtag-count', function () {
   describe('#start', function () {
     var self = this;
 
-    // It should take 60 seconds for the process to finish, but let's give it
-    // some buffer time too.
-    self.timeout(90000);
+    // It should take 5 minutes (300 seconds) for the process to finish, but
+    // let's give it some buffer time too.
+    self.timeout(400000);
 
     it('should return results object ', function (done) {
       hc.start({
