@@ -42,10 +42,34 @@ var intervalCb = function (err, results) {
   }
 };
 
+// Called when connecting to Twitter Streaming API for the first time.
+var connectingCb = function () {
+  var dateString = new Date().toISOString();
+  console.log(dateString + ' Connecting to Twitter Streaming API...');
+};
+
+// Called when reconnecting to Twitter Streaming API after a failed connection.
+// For example, if Twitter rate limits the connection or the stream experiences
+// a timeout.
+var reconnectingCb = function () {
+  var dateString = new Date().toISOString();
+  console.log(dateString + ' Twitter Streaming API connection failed. Reconnecting...');
+};
+
+// Called when a Twitter Streaming API connection is established, either on the
+// first connection attempt or a later reconnection attempt.
+var connectedCb = function () {
+  var dateString = new Date().toISOString();
+  console.log(dateString + ' Connected.');
+};
+
 // Open a connection to Twitter's Streaming API and start capturing tweets!
 hc.start({
-  hashtags: hashtags,       // required
-  interval: interval,       // required
-  history: history,         // optional
-  intervalCb: intervalCb,   // optional
+  hashtags: hashtags,               // required
+  interval: interval,               // required
+  history: history,                 // optional
+  intervalCb: intervalCb,           // optional
+  connectingCb: connectingCb,       // optional
+  reconnectingCb: reconnectingCb,   // optional
+  connectedCb: connectedCb,         // optional
 });
