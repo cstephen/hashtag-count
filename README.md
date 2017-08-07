@@ -109,6 +109,49 @@ interval:
 }
 ```
 
+### Connection status callbacks and a warning about rate limiting
+
+Although Twitter Streaming API connections are designed to remain open
+indefinitely, there are [several reasons why your connection may get
+disconnected](https://dev.twitter.com/streaming/overview/connecting#disconnections).
+hashtag-count will attempt to reconnect automatically. How long it takes to
+reconnect largely depends on whether your application is being [rate limited by
+Twitter](https://dev.twitter.com/streaming/overview/connecting#rate-limiting).
+
+This module allows you to set `connectingCb`, `reconnectingCb`, and
+`connectedCb` callbacks to respond to these events:
+
+```javascript
+var connectingCb = function () {
+  // Called when connecting to Twitter Streaming API for the first time.
+};
+
+var reconnectingCb = function () {
+  // Called as soon as a failed connection is detected and a reschedule
+  // attempt is scheduled.
+};
+
+var connectedCb = function () {
+  // Called when a Twitter Streaming API connection is established, either on
+  // the first connection attempt or a later reconnection attempt.
+};
+
+hc.start({
+  // ...
+  connectingCb: connectingCb,       // optional
+  reconnectingCb: reconnectingCb,   // optional
+  connectedCb: connectedCb,         // optional
+});
+```
+
+### Example scripts
+
+Two example scripts are included. `limited.js` demonstrates how to use this
+module to collect hashtag counts for a finite length of time, whereas
+`unlimited.js` demonstrates how to analyze hashtag counts at the end of every
+time interval without a time limit. You will need to be in the `examples`
+directory to run these scripts so they can read `config.json` properly.
+
 ## Development and testing
 
 If you would like to get involved in development for this module, first clone
@@ -121,14 +164,6 @@ the following command:
 ```
 npm install
 ```
-
-### Example scripts
-
-Two example scripts are included. `limited.js` demonstrates how to use this
-module to collect hashtag counts for a finite length of time, whereas
-`unlimited.js` demonstrates how to analyze hashtag counts at the end of every
-time interval without a time limit. You will need to be in the `examples`
-directory to run these scripts so they can read `config.json` properly.
 
 ### Unit tests
 
