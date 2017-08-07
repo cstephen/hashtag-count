@@ -112,14 +112,14 @@ interval:
 ### Connection status callbacks and a warning about rate limiting
 
 Although Twitter Streaming API connections are designed to remain open
-indefinitely, there are [several reasons why your connection may get
+indefinitely, there are [several reasons why your application may get
 disconnected](https://dev.twitter.com/streaming/overview/connecting#disconnections).
-hashtag-count will attempt to reconnect automatically. How long it takes to
+This module will attempt to reconnect automatically. How long it takes to
 reconnect largely depends on whether your application is being [rate limited by
 Twitter](https://dev.twitter.com/streaming/overview/connecting#rate-limiting).
 
-This module allows you to set `connectingCb`, `reconnectingCb`, and
-`connectedCb` callbacks to respond to these events:
+You can set the optional `connectingCb`, `reconnectingCb`, and `connectedCb`
+callbacks to report and react to these events:
 
 ```javascript
 var connectingCb = function () {
@@ -127,13 +127,13 @@ var connectingCb = function () {
 };
 
 var reconnectingCb = function () {
-  // Called as soon as a failed connection is detected and a reschedule
-  // attempt is scheduled.
+  // Called as soon as a failed connection is detected and a reschedule attempt
+  // is scheduled.
 };
 
 var connectedCb = function () {
-  // Called when a Twitter Streaming API connection is established, either on
-  // the first connection attempt or a later reconnection attempt.
+  // Called when a connection is established, either on the first connection
+  // attempt or a later reconnection attempt.
 };
 
 hc.start({
