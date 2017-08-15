@@ -127,7 +127,7 @@ var connectingCb = function () {
 };
 
 var reconnectingCb = function () {
-  // Called as soon as a failed connection is detected and a reschedule attempt
+  // Called as soon as a failed connection is detected and a reconnect attempt
   // is scheduled.
 };
 
@@ -144,14 +144,6 @@ hc.start({
 });
 ```
 
-### Example scripts
-
-Two example scripts are included. `limited.js` demonstrates how to use this
-module to collect hashtag counts for a finite length of time, whereas
-`unlimited.js` demonstrates how to analyze hashtag counts at the end of every
-time interval without a time limit. You will need to be in the `examples`
-directory to run these scripts so they can read `config.json` properly.
-
 ## Development and testing
 
 If you would like to get involved in development for this module, first clone
@@ -164,6 +156,16 @@ the following command:
 ```
 npm install
 ```
+
+### Example scripts
+
+Two example scripts are included for local module development. `limited.js`
+demonstrates how to use this module to collect hashtag counts for a finite
+length of time, whereas `unlimited.js` demonstrates how to analyze hashtag
+counts at the end of every time interval without a time limit.
+
+You will need to be in the `examples` directory to run these scripts so they can
+read `hashtag-count.js` and `config.json` properly.
 
 ### Unit tests
 
