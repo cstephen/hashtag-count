@@ -123,7 +123,7 @@ var chai = require('chai');
       it('results object keys should contain objects of hashtags and counts ', function () {
         Object.keys(self.results).forEach(function (key) {
           assert.isObject(self.results[key]);
-          assert.isNumber(self.results[key]['test']);
+          assert.isNumber(self.results[key].test);
         });
       });
     });
