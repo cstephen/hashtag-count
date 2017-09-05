@@ -49,10 +49,10 @@ var chai = require('chai');
   var hashtags = ['test'];
   var interval = '1 second';
 
-  // Run for 60 seconds to give Twitter a chance to establish a connection in
+  // Run for 3 minutes to give Twitter a chance to establish a connection in
   // case the Twitter app credentials are being rate limited, and also not to
   // bombard Twitter with rapid reconnections if several tests are run in a row.
-  var limit = '60 seconds';
+  var limit = '3 minutes';
 
   describe('hashtag-count', function () {
     it('hc should be an object ', function () {
@@ -92,9 +92,9 @@ var chai = require('chai');
     describe('#start', function () {
       var self = this;
 
-      // It should take 60 seconds for the process to finish, but let's set the
-      // timeout to 90 seconds to give it some buffer time.
-      self.timeout(90000);
+      // It should take 3 minutes for the process to finish, but let's set the
+      // timeout to 4 minutes to give it some padding.
+      self.timeout(240000);
 
       it('finishedCb should provide results object ', function (done) {
         hc.start({

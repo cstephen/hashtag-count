@@ -45,8 +45,10 @@ var HashtagCount = require('../lib/hashtag-count');
     'access_token_secret': accessTokenSecret
   });
 
+  var startDate = new Date();
   var hashtags = ['test'];
   var interval = '1 second';
+  var history = '1 minute';
 
   describe('hashtag-count', function () {
     it('hc should be an object ', function () {
@@ -86,33 +88,50 @@ var HashtagCount = require('../lib/hashtag-count');
     describe('#start', function () {
       var self = this;
 
-      // Put intervalCb to sleep for 60 seconds before analyzing the results
-      // object. This gives Twitter a chance to establish a connection in case
-      // the Twitter app credentials are being rate limited, and to help avoid
-      // being rate limited if several tests are run in a row.
-      var intervalTimeout = 60000;
+      // Wait 3 minutes before analyzing the results object inside intervalCb.
+      // This gives Twitter a chance to establish a connection in case the
+      // Twitter app credentials are being rate limited, and to help avoid being
+      // rate limited if several tests are run in a row.
+      var testAfter = '3 minutes';
 
-      // It should take 60 seconds for the process to finish, but let's set the
-      // timeout to 90 seconds to give it some buffer time.
-      self.timeout(90000);
+      // It should take 3 minutes for the process to finish, but let's set the
+      // timeout to 4 minutes to give it some padding.
+      self.timeout(240000);
 
-      it('intervalCb should provide results object ', function (done) {
+      it('intervalCb should provide a valid results object ', function (done) {
         hc.start({
           hashtags: hashtags,
           interval: interval,
+          history: history,
           intervalCb: function (err, results) {
-            setTimeout(function () {
-              assert.isNull(err);
-              assert.isObject(results);
+            assert.isNull(err);
+            assert.isObject(results);
+
+            var currentDate = new Date();
+            var negateTestAfter = '-' + testAfter;
+            var testAfterDate = currentDate.strtotime(negateTestAfter);
+
+            if (testAfterDate > startDate) {
+              var negateHistory = '-' + history;
+              var historyDate = currentDate.strtotime(negateHistory);
+              var paddedHistoryDate = historyDate.strtotime('-5 seconds');
+
+              for (var timestamp in results) {
+                if (results.hasOwnProperty(timestamp)) {
+                  var intervalDate = new Date(timestamp);
+                  assert.isAtLeast(intervalDate, paddedHistoryDate);
+                }
+              }
+
               self.results = results;
               done();
-            }, intervalTimeout);
+            }
           }
         });
       });
 
       it('results object should have more than one key ', function () {
-        assert.isAbove(Object.keys(self.results).length, 1);
+        assert.isAtLeast(Object.keys(self.results).length, 1);
       });
 
       it('results object keys should be parsable into Date objects ', function () {
