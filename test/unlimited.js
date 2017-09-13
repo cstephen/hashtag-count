@@ -1,11 +1,15 @@
 'use strict';
 
 describe('unlimited.js', function () {
-var conf = require('nconf');
-var HashtagCount = require('../lib/hashtag-count');
+  var conf = require('nconf');
+  var HashtagCount = require('../lib/hashtag-count');
 
   var chai = require('chai');
   var assert = chai.assert;
+
+  var spies = require('chai-spies');
+  chai.use(spies);
+  chai.should();
 
   conf.file({ file: './config.json' });
 
@@ -45,7 +49,6 @@ var HashtagCount = require('../lib/hashtag-count');
     'access_token_secret': accessTokenSecret
   });
 
-  var startDate = new Date();
   var hashtags = ['test'];
   var interval = '1 second';
   var history = '1 minute';
@@ -59,11 +62,11 @@ var HashtagCount = require('../lib/hashtag-count');
       assert.isObject(hc.T);
     });
 
-    it('hc.T.config should be an object ', function () {
-      assert.isObject(hc.T.config);
-    });
+    describe('config', function () {
+      it('hc.T.config should be an object ', function () {
+        assert.isObject(hc.T.config);
+      });
 
-    describe('#config', function () {
       it('hc.T.config.consumer_key should be set ', function () {
         assert.isString(hc.T.config.consumer_key);
         assert.notEqual('...', hc.T.config.consumer_key);
@@ -85,49 +88,45 @@ var HashtagCount = require('../lib/hashtag-count');
       });
     });
 
+    var self = this;
+    var currentDate;
+    var intervalCbSpy;
+    var connectingCbSpy;
+    var connectedCbSpy;
+
     describe('#start', function () {
-      var self = this;
-
-      // Wait 3 minutes before analyzing the results object inside intervalCb.
-      // This gives Twitter a chance to establish a connection in case the
-      // Twitter app credentials are being rate limited, and to help avoid being
-      // rate limited if several tests are run in a row.
-      var testAfter = '3 minutes';
-
       // It should take 3 minutes for the process to finish, but let's set the
       // timeout to 4 minutes to give it some padding.
-      self.timeout(240000);
+      this.timeout(240000);
 
-      it('intervalCb should provide a valid results object ', function (done) {
+      it('should provide a results object after 3 minutes ', function (done) {
+        connectingCbSpy = chai.spy();
+        connectedCbSpy = chai.spy();
+
+        intervalCbSpy = chai.spy(function (err, results) {
+          currentDate = new Date();
+          self.error = err;
+          self.results = results;
+        });
+
         hc.start({
           hashtags: hashtags,
           interval: interval,
           history: history,
-          intervalCb: function (err, results) {
-            assert.isNull(err);
-            assert.isObject(results);
-
-            var currentDate = new Date();
-            var negateTestAfter = '-' + testAfter;
-            var testAfterDate = currentDate.strtotime(negateTestAfter);
-
-            if (testAfterDate > startDate) {
-              var negateHistory = '-' + history;
-              var historyDate = currentDate.strtotime(negateHistory);
-              var paddedHistoryDate = historyDate.strtotime('-5 seconds');
-
-              for (var timestamp in results) {
-                if (results.hasOwnProperty(timestamp)) {
-                  var intervalDate = new Date(timestamp);
-                  assert.isAtLeast(intervalDate, paddedHistoryDate);
-                }
-              }
-
-              self.results = results;
-              done();
-            }
-          }
+          connectingCb: connectingCbSpy,
+          connectedCb: connectedCbSpy,
+          intervalCb: intervalCbSpy
         });
+
+        // Wait 3 minutes before analyzing the results object in the following
+        // tests. This gives Twitter a chance to establish a connection in case
+        // the Twitter app credentials are being rate limited, and to help avoid
+        // being rate limited if several tests are run in a row.
+        setTimeout(function () {
+          assert.isNull(self.error);
+          assert.isObject(self.results);
+          done();
+        }, 180000);
       });
 
       it('results object should have more than one key ', function () {
@@ -145,6 +144,33 @@ var HashtagCount = require('../lib/hashtag-count');
           assert.isObject(self.results[key]);
           assert.isNumber(self.results[key].test);
         });
+      });
+
+      it('results should not exceed history setting ', function () {
+        var negateHistory = '-' + history;
+        var historyDate = currentDate.strtotime(negateHistory);
+        var paddedHistoryDate = historyDate.strtotime('-5 seconds');
+
+        for (var timestamp in self.results) {
+          if (self.results.hasOwnProperty(timestamp)) {
+            var intervalDate = new Date(timestamp);
+            assert.isAtLeast(intervalDate, paddedHistoryDate);
+          }
+        }
+      });
+    });
+
+    describe('callbacks', function () {
+      it('connectingCb should have been called exactly once ', function () {
+        connectingCbSpy.should.have.been.called.once();
+      });
+
+      it('connectedCb should have been called at least once ', function () {
+        connectedCbSpy.should.have.been.called();
+      });
+
+      it('intervalCb should have been called at least once ', function () {
+        intervalCbSpy.should.have.been.called();
       });
     });
   });

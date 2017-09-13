@@ -1,12 +1,15 @@
 'use strict';
 
 describe('limited.js', function () {
+  var conf = require('nconf');
+  var HashtagCount = require('../lib/hashtag-count');
 
-var conf = require('nconf');
-var HashtagCount = require('../lib/hashtag-count');
-
-var chai = require('chai');
+  var chai = require('chai');
   var assert = chai.assert;
+
+  var spies = require('chai-spies');
+  chai.use(spies);
+  chai.should();
 
   conf.file({ file: './config.json' });
 
@@ -63,11 +66,11 @@ var chai = require('chai');
       assert.isObject(hc.T);
     });
 
-    it('hc.T.config should be an object ', function () {
-      assert.isObject(hc.T.config);
-    });
-
     describe('#config', function () {
+      it('hc.T.config should be an object ', function () {
+        assert.isObject(hc.T.config);
+      });
+
       it('hc.T.config.consumer_key should be set ', function () {
         assert.isString(hc.T.config.consumer_key);
         assert.notEqual('...', hc.T.config.consumer_key);
@@ -89,24 +92,34 @@ var chai = require('chai');
       });
     });
 
-    describe('#start', function () {
-      var self = this;
+    var self = this;
+    var finishedCbSpy;
+    var connectingCbSpy;
+    var connectedCbSpy;
 
+    describe('#start', function () {
       // It should take 3 minutes for the process to finish, but let's set the
       // timeout to 4 minutes to give it some padding.
-      self.timeout(240000);
+      this.timeout(240000);
 
-      it('finishedCb should provide results object ', function (done) {
+      it('should provide a results object after 3 minutes ', function (done) {
+        connectingCbSpy = chai.spy();
+        connectedCbSpy = chai.spy();
+
+        finishedCbSpy = chai.spy(function (err, results) {
+          assert.isNull(err);
+          assert.isObject(results);
+          self.results = results;
+          done();
+        });
+
         hc.start({
           hashtags: hashtags,
           interval: interval,
           limit: limit,
-          finishedCb: function (err, results) {
-            assert.isNull(err);
-            assert.isObject(results);
-            self.results = results;
-            done();
-          }
+          connectingCb: connectingCbSpy,
+          connectedCb: connectedCbSpy,
+          finishedCb: finishedCbSpy
         });
       });
 
@@ -125,6 +138,20 @@ var chai = require('chai');
           assert.isObject(self.results[key]);
           assert.isNumber(self.results[key].test);
         });
+      });
+    });
+
+    describe('callbacks', function () {
+      it('connectingCb should have been called exactly once ', function () {
+        connectingCbSpy.should.have.been.called.once();
+      });
+
+      it('connectedCb should have been called at least once ', function () {
+        connectedCbSpy.should.have.been.called();
+      });
+
+      it('finishedCb should have been called exactly once ', function () {
+        finishedCbSpy.should.have.been.called.once();
       });
     });
   });
