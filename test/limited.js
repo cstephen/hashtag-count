@@ -5,11 +5,9 @@ describe('limited.js', function () {
   var HashtagCount = require('../lib/hashtag-count');
 
   var chai = require('chai');
-  var assert = chai.assert;
-
   var spies = require('chai-spies');
+  var should = chai.should();
   chai.use(spies);
-  chai.should();
 
   conf.file({ file: './config.json' });
 
@@ -59,36 +57,36 @@ describe('limited.js', function () {
 
   describe('hashtag-count', function () {
     it('hc should be an object ', function () {
-      assert.isObject(hc);
+      hc.should.be.a('object');
     });
 
     it('hc.T should be an object ', function () {
-      assert.isObject(hc.T);
+      hc.T.should.be.a('object');
     });
 
     describe('#config', function () {
       it('hc.T.config should be an object ', function () {
-        assert.isObject(hc.T.config);
+        hc.T.config.should.be.a('object');
       });
 
       it('hc.T.config.consumer_key should be set ', function () {
-        assert.isString(hc.T.config.consumer_key);
-        assert.notEqual('...', hc.T.config.consumer_key);
+        hc.T.config.consumer_key.should.be.a('string');
+        hc.T.config.consumer_key.should.not.equal('...');
       });
 
       it('hc.T.config.consumer_secret should be set ', function () {
-        assert.isString(hc.T.config.access_token_secret);
-        assert.notEqual('...', hc.T.config.access_token_secret);
+        hc.T.config.consumer_secret.should.be.a('string');
+        hc.T.config.consumer_secret.should.not.equal('...');
       });
 
       it('hc.T.config.access_token should be set ', function () {
-        assert.isString(hc.T.config.access_token_secret);
-        assert.notEqual('...', hc.T.config.access_token_secret);
+        hc.T.config.access_token.should.be.a('string');
+        hc.T.config.access_token.should.not.equal('...');
       });
 
       it('hc.T.config.access_token_secret should be set ', function () {
-        assert.isString(hc.T.config.access_token_secret);
-        assert.notEqual('...', hc.T.config.access_token_secret);
+        hc.T.config.access_token_secret.should.be.a('string');
+        hc.T.config.access_token_secret.should.not.equal('...');
       });
     });
 
@@ -107,8 +105,8 @@ describe('limited.js', function () {
         connectedCbSpy = chai.spy();
 
         finishedCbSpy = chai.spy(function (err, results) {
-          assert.isNull(err);
-          assert.isObject(results);
+          should.not.exist(err);
+          results.should.be.a('object');
           self.results = results;
           done();
         });
@@ -124,19 +122,19 @@ describe('limited.js', function () {
       });
 
       it('results object should have more than one key ', function () {
-        assert.isAbove(Object.keys(self.results).length, 1);
+        Object.keys(self.results).should.have.length.above(1);
       });
 
       it('results object keys should be parsable into Date objects ', function () {
         Object.keys(self.results).forEach(function (key) {
-          assert.typeOf(new Date(key), 'date');
+          new Date(key).should.be.a('date');
         });
       });
 
       it('results object keys should contain objects of hashtags and counts ', function () {
         Object.keys(self.results).forEach(function (key) {
-          assert.isObject(self.results[key]);
-          assert.isNumber(self.results[key].test);
+          self.results[key].should.be.a('object');
+          self.results[key].test.should.be.a('number');
         });
       });
     });
