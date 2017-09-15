@@ -91,6 +91,7 @@ describe('limited.js', function () {
     });
 
     var self = this;
+    var currentDate;
     var finishedCbSpy;
     var connectingCbSpy;
     var connectedCbSpy;
@@ -107,6 +108,7 @@ describe('limited.js', function () {
         finishedCbSpy = chai.spy(function (err, results) {
           should.not.exist(err);
           results.should.be.a('object');
+          currentDate = new Date();
           self.results = results;
           done();
         });
@@ -136,6 +138,19 @@ describe('limited.js', function () {
           self.results[key].should.be.a('object');
           self.results[key].test.should.be.a('number');
         });
+      });
+
+      it('results should not exceed limit setting ', function () {
+        var negateLimit = '-' + limit;
+        var limitDate = currentDate.strtotime(negateLimit);
+        var paddedLimitDate = limitDate.strtotime('-5 seconds');
+
+        for (var timestamp in self.results) {
+          if (self.results.hasOwnProperty(timestamp)) {
+            var intervalDate = new Date(timestamp);
+            intervalDate.should.be.above(paddedLimitDate);
+          }
+        }
       });
     });
 
