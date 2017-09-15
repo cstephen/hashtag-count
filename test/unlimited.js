@@ -101,8 +101,9 @@ describe('unlimited.js', function () {
         connectedCbSpy = chai.spy();
 
         intervalCbSpy = chai.spy(function (err, results) {
+          should.not.exist(err);
+          results.should.be.a('object');
           self.currentDate = new Date();
-          self.error = err;
           self.results = results;
         });
 
@@ -121,8 +122,6 @@ describe('unlimited.js', function () {
         // limited, and to help avoid being rate limited if several tests
         // are run in a row.
         setTimeout(function () {
-          should.not.exist(self.error);
-          self.results.should.be.a('object');
           done();
         }, 180000);
       });
