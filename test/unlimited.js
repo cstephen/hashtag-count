@@ -87,14 +87,13 @@ describe('unlimited.js', function () {
     });
 
     var self = this;
-    var currentDate;
     var intervalCbSpy;
     var connectingCbSpy;
     var connectedCbSpy;
 
     describe('#start', function () {
-      // It should take 3 minutes for the process to finish, but let's set the
-      // timeout to 4 minutes to give it some padding.
+      // It should take 3 minutes for the process to finish, but let's set
+      // the timeout to 4 minutes to give it some padding.
       this.timeout(240000);
 
       it('should provide a results object after 3 minutes ', function (done) {
@@ -102,7 +101,7 @@ describe('unlimited.js', function () {
         connectedCbSpy = chai.spy();
 
         intervalCbSpy = chai.spy(function (err, results) {
-          currentDate = new Date();
+          self.currentDate = new Date();
           self.error = err;
           self.results = results;
         });
@@ -116,10 +115,11 @@ describe('unlimited.js', function () {
           intervalCb: intervalCbSpy
         });
 
-        // Wait 3 minutes before analyzing the results object in the following
-        // tests. This gives Twitter a chance to establish a connection in case
-        // the Twitter app credentials are being rate limited, and to help avoid
-        // being rate limited if several tests are run in a row.
+        // Wait 3 minutes before analyzing the results object in the
+        // following tests. This gives Twitter a chance to establish a
+        // connection in case the Twitter app credentials are being rate
+        // limited, and to help avoid being rate limited if several tests
+        // are run in a row.
         setTimeout(function () {
           should.not.exist(self.error);
           self.results.should.be.a('object');
@@ -146,7 +146,7 @@ describe('unlimited.js', function () {
 
       it('results should not exceed history setting ', function () {
         var negateHistory = '-' + history;
-        var historyDate = currentDate.strtotime(negateHistory);
+        var historyDate = self.currentDate.strtotime(negateHistory);
         var paddedHistoryDate = historyDate.strtotime('-5 seconds');
 
         for (var timestamp in self.results) {

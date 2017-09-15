@@ -91,7 +91,6 @@ describe('limited.js', function () {
     });
 
     var self = this;
-    var currentDate;
     var finishedCbSpy;
     var connectingCbSpy;
     var connectedCbSpy;
@@ -108,7 +107,7 @@ describe('limited.js', function () {
         finishedCbSpy = chai.spy(function (err, results) {
           should.not.exist(err);
           results.should.be.a('object');
-          currentDate = new Date();
+          self.currentDate = new Date();
           self.results = results;
           done();
         });
@@ -142,7 +141,7 @@ describe('limited.js', function () {
 
       it('results should not exceed limit setting ', function () {
         var negateLimit = '-' + limit;
-        var limitDate = currentDate.strtotime(negateLimit);
+        var limitDate = self.currentDate.strtotime(negateLimit);
         var paddedLimitDate = limitDate.strtotime('-5 seconds');
 
         for (var timestamp in self.results) {
